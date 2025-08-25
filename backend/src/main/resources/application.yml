@@ -1,0 +1,76 @@
+# Spring Boot Configuration
+server:
+  port: 8081
+
+spring:
+  application:
+    name: keycloak-test-api
+  
+  # Database Configuration
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: nguyen
+    driver-class-name: org.postgresql.Driver
+    
+  # JPA Configuration
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    
+  # Jackson Configuration
+  jackson:
+    default-property-inclusion: NON_NULL
+    serialization:
+      write-dates-as-timestamps: false
+
+# Keycloak Configuration
+keycloak:
+  # Try both URL formats depending on your Keycloak version
+  # auth-server-url: http://localhost:8080/auth  # For Keycloak < 17
+  auth-server-url: http://localhost:8080     # For Keycloak 17+
+  
+  realm: myrealm
+  resource: my-public-client
+  credentials:
+    secret: D1MBGk6AN6px1hb6H6gIfiKvuofwLcbj
+  use-resource-role-mappings: true
+  bearer-only: true
+  
+  # Admin configuration for user management
+  admin:
+    realm: myrealm
+    client-id: admin-cli  # Default admin client
+    # Alternative: use your own admin client
+    # client-id: my-admin-client
+    # client-secret: your-admin-client-secret
+    username: admin
+    password: admin
+    # server-url: http://localhost:8080/auth  # Match the version above
+    server-url: http://localhost:8080     # For Keycloak 17+
+
+# Logging Configuration
+logging:
+  level:
+    com.keycloak: DEBUG
+    org.springframework.security: DEBUG
+    org.keycloak: DEBUG
+    org.springframework.web: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+
+# Management Endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
